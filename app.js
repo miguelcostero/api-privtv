@@ -31,10 +31,11 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
 //rutas
-app.get('/', function (req, res) {
+app.get('/empleados', function (req, res) {
   con.query('SELECT * FROM Empleado', function(err, rows) {
     if(err) throw err;
 
+    res.setHeader('Content-Type', 'application/json');
     res.send(rows);
   });
 });

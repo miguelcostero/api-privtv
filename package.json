@@ -1,35 +1,36 @@
 {
-  "name": "nodejs-Custom-Version-Sample",
-  "version": "1.0.1",
-  "description": "OpenShift Node.js Custom Version Sample Application",
+  "name": "privtv-api",
+  "version": "0.0.1",
+  "description": "Streaming de peliculas por suscripcion mensual",
   "keywords": [
-    "OpenShift",
-    "Node.js",
-    "application",
-    "openshift"
+    "API",
+    "peliculas",
+    "Streaming",
+    "suscripcion"
   ],
-  "author": {
-    "name": "ramr",
-    "email": "ramr@example.org",
-    "url":  "http://www.openshift.com/"
-  },
-  "homepage": "http://www.openshift.com/",
+  "author": "Priv.TV <privtv2016@gmail.com>",
+  "homepage": "https://github.com/ramr/nodejs-custom-version-openshift#readme",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ramr/nodejs-custom-version-openshift"
+    "url": "git+https://github.com/ramr/nodejs-custom-version-openshift.git"
   },
-
   "engines": {
     "node": ">= 0.6.0",
     "npm": ">= 1.0.0"
   },
-
   "dependencies": {
-    "express": "*"
+    "body-parser": "^1.15.0",
+    "express": "^4.13.4",
+    "mysql": "^2.10.2"
   },
-  "devDependencies": {},
   "bundleDependencies": [],
-
   "private": true,
-  "main": "server.js"
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "bugs": {
+    "url": "https://github.com/ramr/nodejs-custom-version-openshift/issues"
+  },
+  "license": "ISC"
 }

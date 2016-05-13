@@ -3,6 +3,13 @@ var bodyParser = require('body-parser');
 var mysql = require('mysql');
 
 var app = express();
+//conexion a mysql
+var con = mysql.createConnection({
+  host: process.env.OPENSHIFT_MYSQL_DB_HOST,
+  user: process.env.OPENSHIFT_MYSQL_DB_USERNAME,
+  password: process.env.OPENSHIFT_MYSQL_DB_PASSWORD,
+  database: process.env.OPENSHIFT_APP_NAME
+});
 
 //IP  y puerto de la app
 var ipaddress, port;
@@ -18,7 +25,6 @@ if (typeof ipaddress === "undefined") {
 
 //Archivos estaticos
 app.use('/public', express.static('public'));
-app.use('/public', express.static('bower_components'));
 
 //utilizacion del body-parser
 app.use(bodyParser.json());
@@ -26,7 +32,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //rutas
 app.get('/', function (req, res) {
-	res.send('Hola Mundo!');
+  con.query('SELECT * FROM Empleado', function(err, rows) {
+    if(err) throw err;
+
+    res.send(rows);
+  });
 });
 
 app.post('/users', function (req, res) {

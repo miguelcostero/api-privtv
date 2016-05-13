@@ -26,7 +26,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 //rutas
 app.get('/', function (req, res) {
-	document.write('Hola Mundo!');
+	res.send('Hola Mundo!');
 });
 
 app.post('/users', function (req, res) {

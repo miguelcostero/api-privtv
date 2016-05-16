@@ -1,6 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var mysql = require('mysql');
+var routes = require('./js/routes');
 
 var app = express();
 //conexion a mysql
@@ -27,33 +27,11 @@ if (typeof ipaddress === "undefined") {
 app.use('/public', express.static('public'));
 
 //utilizacion del body-parser
-app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(bodyParser.json());
 
-//rutas
-app.get('/empleados', function (req, res) {
-  con.query('SELECT * FROM Empleado', function(err, rows) {
-    if(err) throw err;
-
-    res.setHeader('Content-Type', 'application/json');
-    res.send(rows);
-  });
-});
-
-app.get('/peliculas', function (req, res) {
-  con.query('SELECT * FROM Pelicula', function(err, rows) {
-    if(err) throw err;
-
-    res.setHeader('Content-Type', 'application/json');
-    res.send(rows);
-  });
-});
-
-app.post('/users', function (req, res) {
-	console.log("Email: "+req.body.email);
-	console.log("Contraseña: "+req.body.pass);
-	res.send('Hemos recibido tus datos.');
-});
+//cargar rutas
+app.use(routes);
 
 //ejecucion del server
 app.listen(port, ipaddress, function () {

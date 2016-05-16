@@ -67,5 +67,18 @@ router.get('/peliculas/:id_pelicula', function (req, res) {
   });
 });
 
+router.get('/pelicula-generos/:id_pelicula', function (req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  con.query('SELECT genero.nombre FROM pelicula INNER JOIN genero_pelicula ON pelicula.idPelicula = genero_pelicula.Pelicula_idPelicula INNER JOIN genero ON genero_pelicula.Genero_idGenero = genero.idGenero WHERE pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
+    if(err) throw err;
+
+    if (_.isEmpty(rows)) {
+      res.send({ "mensaje": "No existe el id '" + req.params.id_pelicula + "' en la base de datos." });
+    } else {
+      res.send(rows);
+    }
+  });
+});
+
 
 module.exports = router;

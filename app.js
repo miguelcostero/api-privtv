@@ -31,7 +31,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 //cargar rutas
-app.use(routes);
+app.use('/', routes);
 
 //ejecucion del server
 app.listen(port, ipaddress, function () {

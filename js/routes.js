@@ -30,9 +30,5 @@ router.get('/peliculas', function (req, res) {
   });
 });
 
-router.get('/peliculas/:id', function (req, res) {
-
-});
-
 
 module.exports = router;

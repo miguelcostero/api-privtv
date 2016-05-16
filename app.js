@@ -40,6 +40,15 @@ app.get('/empleados', function (req, res) {
   });
 });
 
+app.get('/peliculas', function (req, res) {
+  con.query('SELECT * FROM Pelicula', function(err, rows) {
+    if(err) throw err;
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(rows);
+  });
+});
+
 app.post('/users', function (req, res) {
 	console.log("Email: "+req.body.email);
 	console.log("Contraseña: "+req.body.pass);

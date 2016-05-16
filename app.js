@@ -1,5 +1,4 @@
 var express = require('express');
-var bodyParser = require('body-parser');
 var routes = require('./routes');
 
 var app = express();
@@ -18,10 +17,6 @@ if (typeof ipaddress === "undefined") {
 
 //Archivos estaticos
 app.use('/public', express.static('public'));
-
-//utilizacion del body-parser
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
 
 //cargar rutas
 app.use('/', routes);

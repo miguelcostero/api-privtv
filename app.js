@@ -1,15 +1,8 @@
 var express = require('express');
 var bodyParser = require('body-parser');
-var routes = require('./js/routes');
+var routes = require('./routes');
 
 var app = express();
-//conexion a mysql
-var con = mysql.createConnection({
-  host: process.env.OPENSHIFT_MYSQL_DB_HOST,
-  user: process.env.OPENSHIFT_MYSQL_DB_USERNAME,
-  password: process.env.OPENSHIFT_MYSQL_DB_PASSWORD,
-  database: process.env.OPENSHIFT_APP_NAME
-});
 
 //IP  y puerto de la app
 var ipaddress, port;

@@ -2,6 +2,14 @@ var express = require('express');
 var mysql = require('mysql');
 var router = express.Router();
 
+//conexion a mysql
+var con = mysql.createConnection({
+  host: process.env.OPENSHIFT_MYSQL_DB_HOST,
+  user: process.env.OPENSHIFT_MYSQL_DB_USERNAME,
+  password: process.env.OPENSHIFT_MYSQL_DB_PASSWORD,
+  database: process.env.OPENSHIFT_APP_NAME
+});
+
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
   console.log('Time: ', Date.now());

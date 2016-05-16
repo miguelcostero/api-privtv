@@ -45,6 +45,20 @@ router.get('/empleados', function (req, res) {
   });
 });
 
+router.get('/empleados/:id_empleado', function (req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  con.query('SELECT * FROM Empleado WHERE empleado.idEmpleado = " ' + req.params.id_empleado + ' "', function(err, rows) {
+    if(err) throw err;
+
+    if (_.isEmpty(rows)) {
+      res.send({ "mensaje": "No existe el id '" + req.params.id_pelicula + "' en la base de datos." });
+    } else {
+      res.send(rows);
+    }
+  });
+});
+
+//rutas de las peliculas
 router.get('/peliculas', function (req, res) {
   con.query('SELECT * FROM Pelicula', function(err, rows) {
     if(err) throw err;
@@ -69,7 +83,7 @@ router.get('/peliculas/:id_pelicula', function (req, res) {
 
 router.get('/pelicula-generos/:id_pelicula', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-  con.query('SELECT genero.nombre FROM pelicula INNER JOIN genero_pelicula ON pelicula.idPelicula = genero_pelicula.Pelicula_idPelicula INNER JOIN genero ON genero_pelicula.Genero_idGenero = genero.idGenero WHERE pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
+  con.query('SELECT Genero.Nombre FROM Pelicula INNER JOIN Genero_Pelicula ON Pelicula.idPelicula = Genero_Pelicula.Pelicula_idPelicula INNER JOIN Genero ON Genero_pelicula.Genero_idGenero = Genero.idGenero WHERE Pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
     if(err) throw err;
 
     if (_.isEmpty(rows)) {
@@ -80,5 +94,30 @@ router.get('/pelicula-generos/:id_pelicula', function (req, res) {
   });
 });
 
+router.get('/pelicula-actores/:id_pelicula', function (req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  con.query('SELECT actor.* FROM actor INNER JOIN actor_pelicula ON actor.idActor = actor_pelicula.Actor_idActor INNER JOIN pelicula ON actor_pelicula.Pelicula_idPelicula = pelicula.idPelicula WHERE pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
+    if(err) throw err;
+
+    if (_.isEmpty(rows)) {
+      res.send({ "mensaje": "No existe el id '" + req.params.id_pelicula + "' en la base de datos." });
+    } else {
+      res.send(rows);
+    }
+  });
+});
+
+router.get('/pelicula-directores/:id_pelicula', function (req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  con.query('SELECT director.* FROM director INNER JOIN director_pelicula ON director.idDirector = director_pelicula.Director_idDirector INNER JOIN pelicula ON director_pelicula.Pelicula_idPelicula = pelicula.idPelicula WHERE pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
+    if(err) throw err;
+
+    if (_.isEmpty(rows)) {
+      res.send({ "mensaje": "No existe el id '" + req.params.id_pelicula + "' en la base de datos." });
+    } else {
+      res.send(rows);
+    }
+  });
+});
 
 module.exports = router;

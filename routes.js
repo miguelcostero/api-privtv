@@ -77,6 +77,24 @@ router.get('/peliculas-populares', function (req, res) {
   });
 });
 
+router.get('/peliculas-nuevas', function (req, res) {
+  con.query('SELECT Pelicula.* FROM Pelicula ORDER BY (Pelicula.fecha_hora_publicacion) DESC', function(err, rows) {
+    if(err) throw err;
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(rows);
+  });
+});
+
+router.get('/peliculas-alfabeticamente', function (req, res) {
+  con.query('SELECT Pelicula.* FROM Pelicula ORDER BY Pelicula.nombre ASC', function(err, rows) {
+    if(err) throw err;
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(rows);
+  });
+});
+
 router.get('/peliculas/:id_pelicula', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   con.query('SELECT * FROM Pelicula WHERE Pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {

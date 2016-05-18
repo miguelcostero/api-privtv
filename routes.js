@@ -136,7 +136,7 @@ router.get('/pelicula-actores/:id_pelicula', function (req, res) {
 
 router.get('/pelicula-directores/:id_pelicula', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-  con.query('SELECT director.* FROM director INNER JOIN director_pelicula ON director.idDirector = director_pelicula.Director_idDirector INNER JOIN pelicula ON director_pelicula.Pelicula_idPelicula = pelicula.idPelicula WHERE pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
+  con.query('SELECT Director.* FROM Director INNER JOIN Director_Pelicula ON Director.idDirector = Director_Pelicula.Director_idDirector INNER JOIN Pelicula ON Director_Pelicula.Pelicula_idPelicula = Pelicula.idPelicula WHERE Pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
     if(err) throw err;
 
     if (_.isEmpty(rows)) {

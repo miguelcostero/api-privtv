@@ -68,6 +68,15 @@ router.get('/peliculas', function (req, res) {
   });
 });
 
+router.get('/peliculas-populares', function (req, res) {
+  con.query('SELECT Pelicula.*, contaRepro(Pelicula.idPelicula) AS numReproducciones FROM Pelicula ORDER BY numReproducciones DESC', function(err, rows) {
+    if(err) throw err;
+
+    res.setHeader('Content-Type', 'application/json');
+    res.send(rows);
+  });
+});
+
 router.get('/peliculas/:id_pelicula', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   con.query('SELECT * FROM Pelicula WHERE Pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
@@ -96,7 +105,7 @@ router.get('/pelicula-generos/:id_pelicula', function (req, res) {
 
 router.get('/pelicula-actores/:id_pelicula', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-  con.query('SELECT actor.* FROM actor INNER JOIN actor_pelicula ON actor.idActor = actor_pelicula.Actor_idActor INNER JOIN pelicula ON actor_pelicula.Pelicula_idPelicula = pelicula.idPelicula WHERE pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
+  con.query('SELECT Actor.* FROM Actor INNER JOIN Actor_Pelicula ON Actor.idActor = Actor_Pelicula.Actor_idActor INNER JOIN Pelicula ON Actor_Pelicula.Pelicula_idPelicula = Pelicula.idPelicula WHERE Pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
     if(err) throw err;
 
     if (_.isEmpty(rows)) {

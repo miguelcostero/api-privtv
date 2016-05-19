@@ -21,9 +21,11 @@ var con = mysql.createConnection({
   database: database_mysql
 });
 
-//utilizacion del body-parser
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+// create application/json parser
+var jsonParser = bodyParser.json()
+
+// create application/x-www-form-urlencoded parser
+var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
 // middleware that is specific to this router
 router.use(function timeLog(req, res, next) {
@@ -147,18 +149,17 @@ router.get('/pelicula-directores/:id_pelicula', function (req, res) {
   });
 });
 
-router.post('/validar-usuario', function (req, res) {
+router.post('/validar-cliente', urlencodedParser, function (req, res) {
 
-  var email = req.body.email_login;
-  var password = req.body.password_login;
+  if (!req.body) return res.sendStatus(400);
 
-  con.query('SELECT Cliente.* FROM Cliente WHERE Cliente.email = "' + email + '" AND Cliente.password = "' + password + '"', function(err, rows) {
+  con.query('SELECT Cliente.* FROM Cliente WHERE Cliente.email = " ' + req.body.email_login + ' " AND Cliente.password = " ' + req.body.password_login + ' " ', function(err, rows) {
     if(err) throw err;
 
     if (_.isEmpty(rows)) {
-      res.status(401).send('Unauthorized');
+      res.sendStatus(401);
     } else {
-      res.status(200).send('OK');
+      res.sendStatus(200);
     }
   });
 });

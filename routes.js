@@ -147,4 +147,20 @@ router.get('/pelicula-directores/:id_pelicula', function (req, res) {
   });
 });
 
+router.post('/validar-usuario', function (req, res) {
+
+  var email = req.body.email_login;
+  var password = req.body.password_login;
+
+  con.query('SELECT Cliente.* FROM Cliente WHERE Cliente.email = "' + email + '" AND Cliente.password = "' + password + '"', function(err, rows) {
+    if(err) throw err;
+
+    if (_.isEmpty(rows)) {
+      res.status(401).send('Unauthorized');
+    } else {
+      res.status(200).send('OK');
+    }
+  });
+});
+
 module.exports = router;

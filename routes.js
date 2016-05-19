@@ -153,7 +153,7 @@ router.post('/validar-cliente', urlencodedParser, function (req, res) {
 
   if (!req.body) return res.sendStatus(400);
 
-  con.query('SELECT Cliente.* FROM Cliente WHERE Cliente.email = " ' + req.body.email_login + ' " AND Cliente.password = " ' + req.body.password_login + ' " ', function(err, rows) {
+  con.query('SELECT Cliente.* FROM Cliente WHERE Cliente.email = " ' + req.body.email_login + ' " AND Cliente.password = MD5(" ' + req.body.password_login + ' ") ', function(err, rows) {
     if(err) throw err;
 
     if (_.isEmpty(rows)) {

@@ -174,7 +174,6 @@ router.get('/getusers/:email_cliente', function (req, res) {
     if (_.isEmpty(rows)) {
       res.sendStatus(204);
     } else {
-      res.sendStatus(200);
       res.setHeader('Content-Type', 'application/json');
       res.send(rows);
     }
@@ -188,7 +187,6 @@ router.get('/getuser/:id_usuario', function (req, res) {
     if (_.isEmpty(rows)) {
       res.sendStatus(204);
     } else {
-      res.sendStatus(200);
       res.setHeader('Content-Type', 'application/json');
       res.send(rows);
     }

@@ -166,4 +166,33 @@ router.post('/validar-cliente', urlencodedParser, function (req, res) {
   });
 });
 
+router.get('/getusers/:email_cliente', function (req, res) {
+
+  con.query('SELECT Usuario.* FROM Cliente INNER JOIN Usuario ON Cliente.idCliente = Usuario.Cliente_idCliente WHERE Cliente.email = "' + req.params.email_cliente + '"', function(err, rows) {
+    if(err) throw err;
+
+    if (_.isEmpty(rows)) {
+      res.sendStatus(204);
+    } else {
+      res.sendStatus(200);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(rows);
+    }
+  });
+});
+
+router.get('/getuser/:id_usuario', function (req, res) {
+  con.query('SELECT Usuario.* FROM Usuario WHERE Usuario.idUsuario = "' + req.params.id_usuario + '"', function (err, rows) {
+    if(err) throw err;
+
+    if (_.isEmpty(rows)) {
+      res.sendStatus(204);
+    } else {
+      res.sendStatus(200);
+      res.setHeader('Content-Type', 'application/json');
+      res.send(rows);
+    }
+  });
+});
+
 module.exports = router;

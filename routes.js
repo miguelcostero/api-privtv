@@ -193,7 +193,7 @@ router.get('/getuser/:id_usuario', function (req, res) {
   });
 });
 
-router.get('http://api-privtv.rhcloud.com/peliculas/:id_pelicula/subtitlos', function (req, res) {
+router.get('/peliculas/:id_pelicula/subtitlos', function (req, res) {
   con.query('SELECT Subtitulo.* FROM Pelicula INNER JOIN Subtitulo ON Pelicula.idPelicula = Subtitulo.Pelicula_idPelicula WHERE Pelicula.idPelicula = "' + req.params.id_pelicula + '"', function (err, rows) {
     if(err) throw err;
 

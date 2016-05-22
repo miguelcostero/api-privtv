@@ -149,7 +149,7 @@ router.get('/pelicula-directores/:id_pelicula', function (req, res) {
   });
 });
 
-router.post('/validar-cliente', urlencodedParser, function (req, res) {
+router.post('/validar-cliente', jsonParser, function (req, res) {
 
   if (!req.body) return res.sendStatus(400);
 
@@ -172,7 +172,7 @@ router.get('/getusers/:email_cliente', function (req, res) {
     if(err) throw err;
 
     if (_.isEmpty(rows)) {
-      res.sendStatus(204);
+      res.sendStatus(404);
     } else {
       res.setHeader('Content-Type', 'application/json');
       res.send(rows);
@@ -185,12 +185,25 @@ router.get('/getuser/:id_usuario', function (req, res) {
     if(err) throw err;
 
     if (_.isEmpty(rows)) {
-      res.sendStatus(204);
+      res.sendStatus(404);
     } else {
       res.setHeader('Content-Type', 'application/json');
       res.send(rows);
     }
   });
 });
+
+router.get('http://api-privtv.rhcloud.com/peliculas/:id_pelicula/subtitlos', function (req, res) {
+  con.query('SELECT Subtitulo.* FROM Pelicula INNER JOIN Subtitulo ON Pelicula.idPelicula = Subtitulo.Pelicula_idPelicula WHERE Pelicula.idPelicula = "' + req.params.id_pelicula + '"', function (err, rows) {
+    if(err) throw err;
+
+    if (_.isEmpty(rows)) {
+      res.sendStatus(404);
+    } else {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(rows);
+    }
+  });
+})
 
 module.exports = router;

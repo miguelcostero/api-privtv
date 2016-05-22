@@ -149,7 +149,7 @@ router.get('/pelicula-directores/:id_pelicula', function (req, res) {
   });
 });
 
-router.post('/validar-cliente', jsonParser, function (req, res) {
+router.post('/validar-cliente', urlencodedParser, function (req, res) {
 
   if (!req.body) return res.sendStatus(400);
 

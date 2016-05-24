@@ -62,7 +62,7 @@ router.get('/empleados/:id_empleado', function (req, res) {
 
 //rutas de las peliculas
 router.get('/peliculas', function (req, res) {
-  con.query('SELECT * FROM Pelicula', function(err, rows) {
+  con.query('SELECT Pelicula.*, contaRepro(Pelicula.idPelicula) AS numReproducciones FROM Pelicula', function(err, rows) {
     if(err) throw err;
 
     res.setHeader('Content-Type', 'application/json');

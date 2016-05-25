@@ -72,7 +72,7 @@ router.get('/peliculas', function (req, res) {
 
 router.get('/peliculas/:id_pelicula', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
-  con.query('SELECT Pelicula.*, contaRepro(Pelicula.idPelicula) AS numReproducciones, GROUP_CONCAT(Genero.nombre) AS Generos FROM Pelicula INNER JOIN Genero_Pelicula ON Pelicula.idPelicula = Genero_Pelicula.Pelicula_idPelicula INNER JOIN Genero ON Genero_Pelicula.Genero_idGenero = Genero.idGenero GROUP BY Pelicula.idPelicula WHERE Pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
+  con.query('SELECT Pelicula.*, contaRepro(Pelicula.idPelicula) AS numReproducciones, GROUP_CONCAT(Genero.nombre) AS Generos FROM Pelicula INNER JOIN Genero_Pelicula ON Pelicula.idPelicula = Genero_Pelicula.Pelicula_idPelicula INNER JOIN Genero ON Genero_Pelicula.Genero_idGenero = Genero.idGenero WHERE Pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
     if(err) throw err;
 
     if (_.isEmpty(rows)) {

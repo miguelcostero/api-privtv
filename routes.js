@@ -83,6 +83,32 @@ router.get('/peliculas/:id_pelicula', function (req, res) {
   });
 });
 
+router.get("/peliculas/generos", function (req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  con.query('SELECT Genero.* FROM Genero', function (err, rows) {
+    if (err) throw err;
+
+    if (_.isEmpty(rows)) {
+      res.send({ "mensaje": "No hay generos en la base de datos" });
+    } else {
+      res.send(rows);
+    }
+  })
+})
+
+router.get("/peliculas/generos/:id_genero", function (req, res) {
+  res.setHeader('Content-Type', 'application/json');
+  con.query('SELECT Genero.* FROM Genero WHERE Genero.idGenero = " ${ req.params.id_genero } "', function (err, rows) {
+    if (err) throw err;
+
+    if (_.isEmpty(rows)) {
+      res.send({ "mensaje": "No hay generos en la base de datos" });
+    } else {
+      res.send(rows);
+    }
+  })
+})
+
 router.get('/pelicula-generos/:id_pelicula', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   con.query('SELECT Genero.Nombre FROM Genero INNER JOIN Genero_Pelicula ON Genero.idGenero = Genero_Pelicula.Genero_idGenero INNER JOIN Pelicula ON Genero_Pelicula.Pelicula_idPelicula = Pelicula.idPelicula WHERE Pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {

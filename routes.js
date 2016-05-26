@@ -102,7 +102,7 @@ router.get("/peliculas/generos/:id_genero", function (req, res) {
     if (err) throw err;
 
     if (_.isEmpty(rows)) {
-      res.send({ "mensaje": "No hay generos en la base de datos" });
+      res.send({ "mensaje": "No hay pelicula con ese genero en la base de datos" });
     } else {
       res.send(rows);
     }

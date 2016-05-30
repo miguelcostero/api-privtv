@@ -154,9 +154,9 @@ router.post('/validar-cliente', urlencodedParser, function (req, res) {
   });
 });
 
-router.get('/getusers/:email_cliente', function (req, res) {
+router.get('/getusers/:id_cliente', function (req, res) {
 
-  con.query('SELECT Usuario.* FROM Cliente INNER JOIN Usuario ON Cliente.idCliente = Usuario.Cliente_idCliente WHERE Cliente.email = "' + req.params.email_cliente + '"', function(err, rows) {
+  con.query('SELECT Usuario.* FROM Cliente INNER JOIN Usuario ON Cliente.idCliente = Usuario.Cliente_idCliente WHERE Cliente.idCliente = "' + req.params.id_cliente + '"', function(err, rows) {
     if(err) throw err;
 
     if (_.isEmpty(rows)) {

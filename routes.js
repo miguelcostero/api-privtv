@@ -154,7 +154,7 @@ router.post('/validar-cliente', urlencodedParser, function (req, res) {
   });
 });
 
-router.get('/getusers/:id_cliente', function (req, res) {
+router.get('/users/cliente/:id_cliente', function (req, res) {
 
   con.query('SELECT Usuario.* FROM Cliente INNER JOIN Usuario ON Cliente.idCliente = Usuario.Cliente_idCliente WHERE Cliente.idCliente = "' + req.params.id_cliente + '"', function(err, rows) {
     if(err) throw err;
@@ -168,7 +168,7 @@ router.get('/getusers/:id_cliente', function (req, res) {
   });
 });
 
-router.get('/getuser/:id_usuario', function (req, res) {
+router.get('/users/:id_usuario', function (req, res) {
   con.query('SELECT Usuario.* FROM Usuario WHERE Usuario.idUsuario = "' + req.params.id_usuario + '"', function (err, rows) {
     if(err) throw err;
 

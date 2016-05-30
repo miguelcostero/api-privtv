@@ -38,28 +38,6 @@ router.get('/', function(req, res) {
   res.send('API home page');
 });
 
-router.get('/empleados', function (req, res) {
-  con.query('SELECT * FROM Empleado', function(err, rows) {
-    if(err) throw err;
-
-    res.setHeader('Content-Type', 'application/json');
-    res.send(rows);
-  });
-});
-
-router.get('/empleados/:id_empleado', function (req, res) {
-  res.setHeader('Content-Type', 'application/json');
-  con.query('SELECT * FROM Empleado WHERE empleado.idEmpleado = " ' + req.params.id_empleado + ' "', function(err, rows) {
-    if(err) throw err;
-
-    if (_.isEmpty(rows)) {
-      res.send({ "mensaje": "No existe el id '" + req.params.id_pelicula + "' en la base de datos." });
-    } else {
-      res.send(rows);
-    }
-  });
-});
-
 //rutas de las peliculas
 router.get('/peliculas', function (req, res) {
   con.query('SELECT Pelicula.*, contaRepro(Pelicula.idPelicula) AS numReproducciones, GROUP_CONCAT(Genero.nombre) AS Generos FROM Pelicula INNER JOIN Genero_Pelicula ON Pelicula.idPelicula = Genero_Pelicula.Pelicula_idPelicula INNER JOIN Genero ON Genero_Pelicula.Genero_idGenero = Genero.idGenero GROUP BY Pelicula.idPelicula', function(err, rows) {
@@ -151,6 +129,7 @@ router.get('/pelicula-directores/:id_pelicula', function (req, res) {
 router.post('/validar-cliente', urlencodedParser, function (req, res) {
 
   if (!req.body) return res.sendStatus(400);
+  var cliente = "";
 
   console.log("mail: "+req.body.email_login+" - pass: "+req.body.password_login);
 
@@ -160,7 +139,17 @@ router.post('/validar-cliente', urlencodedParser, function (req, res) {
     if (_.isEmpty(rows)) {
       res.sendStatus(401);
     } else {
-      res.sendStatus(200);
+      cliente = rows;
+      con.query('SELECT Empleado.* FROM Empleado INNER JOIN Cliente ON Empleado.Cliente_idCliente = Cliente.idCliente WHERE Cliente.idCliente = " ' + cliente[0].idCliente + ' "', function (error, row) {
+        if(error) throw error;
+
+        if (_.isEmpty(row)) {
+          res.send(cliente);
+        } else {
+          cliente[0].empleado_info = row;
+          res.send(cliente);
+        }
+      })
     }
   });
 });

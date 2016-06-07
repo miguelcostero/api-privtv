@@ -208,7 +208,7 @@ router.get('/empleado', function (req, res) {
 })
 
 router.get('/empleado/:id_empleado', function (req, res) {
-  con.query('SELECT Empleado.idEmpleado, Empleado.rango, Cliente.* FROM Empleado INNER JOIN Cliente ON Empleado.Cliente_idCliente = Cliente.idCliente WHERE Empleado.id_empleado = "'+ req.params.id_empleado +'"', function (err, rows) {
+  con.query('SELECT Empleado.idEmpleado, Empleado.rango, Cliente.* FROM Empleado INNER JOIN Cliente ON Empleado.Cliente_idCliente = Cliente.idCliente WHERE Empleado.idEmpleado = "'+ req.params.id_empleado +'"', function (err, rows) {
     if (err) throw err;
 
     if (_.isEmpty(rows)) {

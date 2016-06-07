@@ -194,4 +194,30 @@ router.get('/peliculas/:id_pelicula/subtitulos', function (req, res) {
   });
 })
 
+router.get('/empleado', function (req, res) {
+  con.query('SELECT Empleado.idEmpleado, Empleado.rango, Cliente.* FROM Empleado INNER JOIN Cliente ON Empleado.Cliente_idCliente = Cliente.idCliente', function (err, rows) {
+    if (err) throw err;
+
+    if (_.isEmpty(rows)) {
+      res.sendStatus(404);
+    } else {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(rows);
+    }
+  })
+})
+
+router.get('/empleado/:id_empleado', function (req, res) {
+  con.query('SELECT Empleado.idEmpleado, Empleado.rango, Cliente.* FROM Empleado INNER JOIN Cliente ON Empleado.Cliente_idCliente = Cliente.idCliente WHERE Empleado.id_empleado = "'+ req.params.id_empleado +'"', function (err, rows) {
+    if (err) throw err;
+
+    if (_.isEmpty(rows)) {
+      res.sendStatus(404);
+    } else {
+      res.setHeader('Content-Type', 'application/json');
+      res.send(rows);
+    }
+  })
+})
+
 module.exports = router;

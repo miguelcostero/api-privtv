@@ -11,7 +11,7 @@ var host_mysql, user_mysql, password_mysql, database_mysql;
 
 host_mysql = process.env.OPENSHIFT_MYSQL_DB_HOST || 'localhost';
 user_mysql = process.env.OPENSHIFT_MYSQL_DB_USERNAME || 'root';
-password_mysql = process.env.OPENSHIFT_MYSQL_DB_PASSWORD || '1232';
+password_mysql = process.env.OPENSHIFT_MYSQL_DB_PASSWORD || '';
 database_mysql = process.env.OPENSHIFT_APP_NAME || 'api';
 
 var con = mysql.createConnection({

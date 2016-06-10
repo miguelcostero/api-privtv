@@ -4,7 +4,7 @@ var methodOverride = require('method-override');
 var logger = require('morgan');
 var _ = require('underscore');
 var mysql = require('mysql');
-var router = express.Router();
+var cors = require('cors');
 var app = express();
 
 //conexion a mysql
@@ -26,6 +26,7 @@ var con = mysql.createConnection({
 app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
+app.use(cors());
 
 //configuramos methodOverride
 app.use(methodOverride(function(req, res){

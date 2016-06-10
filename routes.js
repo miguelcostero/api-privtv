@@ -221,7 +221,7 @@ router.get('/empleado/:id_empleado', function (req, res) {
 })
 
 router.post('/login/empleado', jsonParser, function (req, res) {
-  res.send(req.login)
+  res.send(req)
 })
 
 module.exports = router;

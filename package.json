@@ -21,6 +21,8 @@
   "dependencies": {
     "body-parser": "^1.15.0",
     "express": "^4.13.4",
+    "method-override": "^2.3.6",
+    "morgan": "^1.7.0",
     "mysql": "^2.10.2",
     "underscore": "^1.8.3",
     "underscore.string": "^3.3.4"

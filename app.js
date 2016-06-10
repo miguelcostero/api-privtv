@@ -1,5 +1,6 @@
 var express = require('express');
 var routes = require('./routes');
+var admin_routes = require('./admin');
 
 var app = express();
 
@@ -20,6 +21,7 @@ app.use('/public', express.static('public'));
 
 //cargar rutas
 app.use('/', routes);
+app.use('/admin', admin_routes);
 
 //ejecucion del server
 app.listen(port, ipaddress, function () {

@@ -42,11 +42,7 @@ app.use(methodOverride(function(req, res){
 app.post('/login/', function (req, res) {
   //peticion
   if (!req.body) return  res.status(500).json({"msg":"Error"})
-/*
-  res.header("Access-Control-Allow-Origin", "*")
-  res.header("Access-Control-Allow-Headers", "Cache-Control, Pragma, Origin, Authorization, Content-Type, X-Requested-With")
-  res.header("Access-Control-Allow-Methods", "GET, PUT, POST, DELETE")
-*/
+
   con.query("SELECT Cliente.*, Empleado.* FROM Cliente INNER JOIN Empleado ON Cliente.idCliente = Empleado.Cliente_idCliente WHERE Cliente.email = '" + req.body.datos.email + "' AND Cliente.password = md5('" + req.body.datos.password + "')", function (err, rows) {
     if (err) throw err
 

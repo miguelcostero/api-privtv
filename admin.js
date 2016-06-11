@@ -41,7 +41,7 @@ app.use(methodOverride(function(req, res){
 //ruta para hacer login
 app.post('/login/', function (req, res) {
   //peticion
-  if (!req.body) return  res.status(500).json({"msg":"Error"})
+  if (!req.body) return  res.status(400).json({"msg":"Error"})
 
   con.query("SELECT Cliente.*, Empleado.* FROM Cliente INNER JOIN Empleado ON Cliente.idCliente = Empleado.Cliente_idCliente WHERE Cliente.email = '" + req.body.datos.email + "' AND Cliente.password = md5('" + req.body.datos.password + "')", function (err, rows) {
     if (err) throw err
@@ -49,7 +49,7 @@ app.post('/login/', function (req, res) {
     if (!_.isEmpty(rows)) {
       res.status(200).json(rows)
     } else {
-      res.status(500).json({"msg":"No se ha encontrado su búsqueda"})
+      res.status(204).json({"msg":"No se ha encontrado su búsqueda"})
     }
   })
 });

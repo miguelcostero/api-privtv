@@ -3,7 +3,7 @@ var bodyParser = require('body-parser');
 var _ = require('underscore');
 var s_ = require("underscore.string");
 var mysql = require('mysql');
-var router = express.Router();
+var cors = require('cors');
 var app = express();
 
 //conexion a mysql
@@ -27,19 +27,21 @@ var jsonParser = bodyParser.json()
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
 
-// middleware that is specific to this router
-router.use(function timeLog(req, res, next) {
+app.use(cors());
+
+// middleware that is specific to this app
+app.use(function timeLog(req, res, next) {
   console.log('Time: ', Date.now());
   next();
 });
 
 // define the home page route
-router.get('/', function(req, res) {
+app.get('/', function(req, res) {
   res.send('API home page');
 });
 
 //rutas de las peliculas
-router.get('/peliculas', function (req, res) {
+app.get('/peliculas', function (req, res) {
   con.query('SELECT Pelicula.*, contaRepro(Pelicula.idPelicula) AS numReproducciones, GROUP_CONCAT(Genero.nombre) AS Generos FROM Pelicula INNER JOIN Genero_Pelicula ON Pelicula.idPelicula = Genero_Pelicula.Pelicula_idPelicula INNER JOIN Genero ON Genero_Pelicula.Genero_idGenero = Genero.idGenero GROUP BY Pelicula.idPelicula', function(err, rows) {
     if(err) throw err;
 
@@ -48,7 +50,7 @@ router.get('/peliculas', function (req, res) {
   });
 });
 
-router.get('/peliculas/:id_pelicula', function (req, res) {
+app.get('/peliculas/:id_pelicula', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   con.query('SELECT Pelicula.*, contaRepro(Pelicula.idPelicula) AS numReproducciones, GROUP_CONCAT(Genero.nombre) AS Generos FROM Pelicula INNER JOIN Genero_Pelicula ON Pelicula.idPelicula = Genero_Pelicula.Pelicula_idPelicula INNER JOIN Genero ON Genero_Pelicula.Genero_idGenero = Genero.idGenero WHERE Pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
     if(err) throw err;
@@ -61,7 +63,7 @@ router.get('/peliculas/:id_pelicula', function (req, res) {
   });
 });
 
-router.get("/peliculas/generos", function (req, res) {
+app.get("/peliculas/generos", function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   con.query('SELECT Genero.* FROM Genero', function (err, rows) {
     if (err) throw err;
@@ -74,7 +76,7 @@ router.get("/peliculas/generos", function (req, res) {
   })
 })
 
-router.get("/peliculas/generos/:id_genero", function (req, res) {
+app.get("/peliculas/generos/:id_genero", function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   con.query('SELECT Pelicula.*, Genero.* FROM Genero INNER JOIN Genero_Pelicula ON Genero.idGenero = Genero_Pelicula.Genero_idGenero INNER JOIN Pelicula ON Genero_Pelicula.Pelicula_idPelicula = Pelicula.idPelicula WHERE Genero.idGenero = " '+ req.params.id_genero +' "', function (err, rows) {
     if (err) throw err;
@@ -87,7 +89,7 @@ router.get("/peliculas/generos/:id_genero", function (req, res) {
   })
 })
 
-router.get('/pelicula-generos/:id_pelicula', function (req, res) {
+app.get('/pelicula-generos/:id_pelicula', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   con.query('SELECT Genero.Nombre FROM Genero INNER JOIN Genero_Pelicula ON Genero.idGenero = Genero_Pelicula.Genero_idGenero INNER JOIN Pelicula ON Genero_Pelicula.Pelicula_idPelicula = Pelicula.idPelicula WHERE Pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
     if(err) throw err;
@@ -100,7 +102,7 @@ router.get('/pelicula-generos/:id_pelicula', function (req, res) {
   });
 });
 
-router.get('/pelicula-actores/:id_pelicula', function (req, res) {
+app.get('/pelicula-actores/:id_pelicula', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   con.query('SELECT Actor.*, Actor_Pelicula.Personaje FROM Actor INNER JOIN Actor_Pelicula ON Actor.idActor = Actor_Pelicula.Actor_idActor INNER JOIN Pelicula ON Actor_Pelicula.Pelicula_idPelicula = Pelicula.idPelicula WHERE Pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
     if(err) throw err;
@@ -113,7 +115,7 @@ router.get('/pelicula-actores/:id_pelicula', function (req, res) {
   });
 });
 
-router.get('/pelicula-directores/:id_pelicula', function (req, res) {
+app.get('/pelicula-directores/:id_pelicula', function (req, res) {
   res.setHeader('Content-Type', 'application/json');
   con.query('SELECT Director.* FROM Director INNER JOIN Director_Pelicula ON Director.idDirector = Director_Pelicula.Director_idDirector INNER JOIN Pelicula ON Director_Pelicula.Pelicula_idPelicula = Pelicula.idPelicula WHERE Pelicula.idPelicula = " ' + req.params.id_pelicula + ' "', function(err, rows) {
     if(err) throw err;
@@ -126,7 +128,7 @@ router.get('/pelicula-directores/:id_pelicula', function (req, res) {
   });
 });
 
-router.post('/validar-cliente', urlencodedParser, function (req, res) {
+app.post('/validar-cliente', urlencodedParser, function (req, res) {
 
   if (!req.body) return res.sendStatus(400);
   var cliente = "";
@@ -154,7 +156,7 @@ router.post('/validar-cliente', urlencodedParser, function (req, res) {
   });
 });
 
-router.get('/users/cliente/:id_cliente', function (req, res) {
+app.get('/users/cliente/:id_cliente', function (req, res) {
 
   con.query('SELECT Usuario.* FROM Cliente INNER JOIN Usuario ON Cliente.idCliente = Usuario.Cliente_idCliente WHERE Cliente.idCliente = "' + req.params.id_cliente + '"', function(err, rows) {
     if(err) throw err;
@@ -168,7 +170,7 @@ router.get('/users/cliente/:id_cliente', function (req, res) {
   });
 });
 
-router.get('/users/:id_usuario', function (req, res) {
+app.get('/users/:id_usuario', function (req, res) {
   con.query('SELECT Usuario.* FROM Usuario WHERE Usuario.idUsuario = "' + req.params.id_usuario + '"', function (err, rows) {
     if(err) throw err;
 
@@ -181,7 +183,7 @@ router.get('/users/:id_usuario', function (req, res) {
   });
 });
 
-router.get('/peliculas/:id_pelicula/subtitulos', function (req, res) {
+app.get('/peliculas/:id_pelicula/subtitulos', function (req, res) {
   con.query('SELECT Subtitulo.* FROM Pelicula INNER JOIN Subtitulo ON Pelicula.idPelicula = Subtitulo.Pelicula_idPelicula WHERE Pelicula.idPelicula = "' + req.params.id_pelicula + '"', function (err, rows) {
     if(err) throw err;
 
@@ -194,7 +196,7 @@ router.get('/peliculas/:id_pelicula/subtitulos', function (req, res) {
   });
 })
 
-router.get('/empleado', function (req, res) {
+app.get('/empleado', function (req, res) {
   con.query('SELECT Empleado.idEmpleado, Empleado.rango, Cliente.* FROM Empleado INNER JOIN Cliente ON Empleado.Cliente_idCliente = Cliente.idCliente', function (err, rows) {
     if (err) throw err;
 
@@ -207,7 +209,7 @@ router.get('/empleado', function (req, res) {
   })
 })
 
-router.get('/empleado/:id_empleado', function (req, res) {
+app.get('/empleado/:id_empleado', function (req, res) {
   con.query('SELECT Empleado.idEmpleado, Empleado.rango, Cliente.* FROM Empleado INNER JOIN Cliente ON Empleado.Cliente_idCliente = Cliente.idCliente WHERE Empleado.idEmpleado = "'+ req.params.id_empleado +'"', function (err, rows) {
     if (err) throw err;
 
@@ -220,4 +222,4 @@ router.get('/empleado/:id_empleado', function (req, res) {
   })
 })
 
-module.exports = router;
+module.exports = app;

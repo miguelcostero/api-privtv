@@ -9,10 +9,10 @@
     "suscripcion"
   ],
   "author": "Priv.TV <privtv2016@gmail.com>",
-  "homepage": "https://github.com/ramr/nodejs-custom-version-openshift#readme",
+  "homepage": "https://api-privtv.rhcloud.com",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ramr/nodejs-custom-version-openshift.git"
+    "url": "git+https://github.com/miguelcostero/api-privtv"
   },
   "engines": {
     "node": ">= 0.6.0",
@@ -35,7 +35,7 @@
     "start": "node app.js"
   },
   "bugs": {
-    "url": "https://github.com/ramr/nodejs-custom-version-openshift/issues"
+    "url": "https://github.com/miguelcostero/api-privtv/issues"
   },
   "license": "ISC"
 }

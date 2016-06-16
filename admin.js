@@ -52,7 +52,37 @@ app.post('/login/', function (req, res) {
       res.status(204).json({"msg":"No se ha encontrado su búsqueda"})
     }
   })
-});
+})
+
+app.put('/peliculas/:id_pelicula', function (req, res) {
+  //peticion
+  if (!req.body) return  res.status(400).json({"msg":"Error"})
+
+  con.query("UPDATE Pelicula SET nombre='" + req.body.datos.nombre + "', sipnosis='"+ req.body.datos.sipnosis +"',idioma='" +req.body.datos.idioma+ "',ano_publicacion='" +req.body.datos.ano_publicacion+ "',duracion='" +req.body.datos.duracion+ "',clasificacion='" +req.body.datos.clasificacion+ "',formato='" +req.body.datos.formato+ "',poster= '" +req.body.datos.poster+ "', movie_source='" +req.body.datos.movie_source+ "',trailer_source='" +req.body.datos.trailer_source+ "',fecha_hora_publicacion='" +req.body.datos.fecha_hora_publicacion+ "' WHERE idPelicula= '"+ req.body.datos.idPelicula +"'", function (err, rows) {
+    if(err) throw err;
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).json(rows)
+    } else {
+      res.status(400).json({"msg": "No se ha podido completar la actualización"})
+    }
+  })
+})
+
+app.delete('/peliculas/:id_pelicula', function (req, res) {
+  //peticion
+  if (!req.body) return  res.status(400).json({"msg":"Error"})
+
+  con.query("DELETE FROM Pelicula WHERE idPelicula = '"+ req.params.id_pelicula +"'", function (err, rows) {
+    if(err) throw err;
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).json(rows)
+    } else {
+      res.status(400).json({"msg": "No se ha podido eliminar la pelicula"})
+    }
+  })
+})
 
 
 module.exports = app;

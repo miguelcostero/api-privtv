@@ -222,4 +222,19 @@ app.get('/empleado/:id_empleado', function (req, res) {
   })
 })
 
+app.post('/peliculas/reproduccion/:id_pelicula', jsonParser, urlencodedParser, function (req, res) {
+  //peticion
+  if (!req.body) return  res.status(400).json({"msg":"Error"})
+
+  con.query("INSERT INTO Historial (idHistorial, fecha_hora_reproduccion, Pelicula_idPelicula, Usuario_idUsuario, Usuario_Cliente_idCliente) VALUES (DEFAULT , NOW(), '"+ req.params.id_pelicula +"', '"+ req.body.datos.id_usuario +"', '"+ req.body.datos.id_cliente +"')", function (err, rows) {
+    if(err) throw err
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).json(rows)
+    } else {
+      res.status(400).json({"msg": "No se ha podido agregar la reproduccion"})
+    }
+  })
+})
+
 module.exports = app;

@@ -84,5 +84,19 @@ app.delete('/peliculas/:id_pelicula', function (req, res) {
   })
 })
 
+app.put('/clientes/basicos/:id_cliente', function (req, res) {
+  if (!req.body) return res.status(400).json({"msg":"Error"})
+
+  con.query("UPDATE Cliente SET Cliente.email = '"+req.body.datos.email+"',Cliente.nombre = '"+req.body.datos.nombre+"',Cliente.apellido = '"+req.body.datos.apellido+"',Cliente.fecha_nacimiento = '"+req.body.datos.fecha_nacimiento+"',Cliente.telefono = '"+req.body.datos.telefono+"',Cliente.direccion = '"+req.body.datos.direccion+"' WHERE Cliente.idCliente = '"+req.params.id_cliente+"' ", function (err, rows) {
+    if (err) throw err
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).json(rows)
+    } else {
+      res.status(400).json({"msg": "No se ha podido completar la peticion"})
+    }
+  })
+})
+
 
 module.exports = app;

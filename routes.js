@@ -237,4 +237,18 @@ app.post('/peliculas/reproduccion/:id_pelicula', jsonParser, urlencodedParser, f
   })
 })
 
+app.get('/clientes/:id_cliente', function (req, res) {
+  if (!req.params.id_cliente) return res.status(400).json({"msg":"No se ha especificado ID de cliente"})
+
+  con.query("SELECT Cliente.* FROM Cliente WHERE Cliente.idCliente = '"+req.params.id_cliente+"'", function (err, rows) {
+    if(err) throw err
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).json(rows)
+    } else {
+      res.status(400).json({"msg": "No se ha encontrado un cliente con el id especificado"})
+    }
+  })
+})
+
 module.exports = app;

@@ -107,7 +107,7 @@ app.put('/clientes/password/:id_cliente', function (req, res) {
     if (!_.isEmpty(rows)) {
       res.status(200).json(rows)
     } else {
-      res.status(400).json("msg": "No se ha podido completar la actualización.")
+      res.status(400).json({"msg": "No se ha podido completar la peticion"})
     }
   })
 })

@@ -112,5 +112,4 @@ app.put('/clientes/password/:id_cliente', function (req, res) {
   })
 })
 
-
 module.exports = app;

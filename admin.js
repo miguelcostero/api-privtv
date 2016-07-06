@@ -98,5 +98,19 @@ app.put('/clientes/basicos/:id_cliente', function (req, res) {
   })
 })
 
+app.put('/clientes/password/:id_cliente', function (req, res) {
+  if (!req.body) return res.status(400).json({"msg":"Error"})
+
+  con.query("UPDATE Cliente SET Cliente.password = '"+req.body.password+"' WHERE Cliente.idCliente = '"+req.params.id_cliente+"'", function (err, rows) {
+    if (err) throw err
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).json(rows)
+    } else {
+      res.status(400).json("msg": "No se ha podido completar la actualización.")
+    }
+  })
+})
+
 
 module.exports = app;

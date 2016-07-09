@@ -126,4 +126,32 @@ app.get('/clientes/:id_cliente/suscripcion', function (req, res) {
   })
 })
 
+app.patch('/clientes/:id_cliente/suscripcion/:id_suscripcion', function (req, res) {
+  if (!req.body) return res.status(400).json({"msg":"Error"})
+
+  con.query("UPDATE Cliente SET Cliente.tipo_suscripcion_id_tipo_suscripcion = '"+req.params.id_suscripcion+"' WHERE Cliente.idCliente = '"+req.params.id_cliente+"'", function (err, rows) {
+    if(err) throw err
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).json(rows)
+    } else {
+      res.status(400).json({"msg":"No se ha podido completar la petición."})
+    }
+  })
+})
+
+app.get('/planes', function (req, res) {
+  if (!req.body) return res.status(400).json({"msg":"Error"})
+
+  con.query("SELECT tipo_suscripcion.* FROM tipo_suscripcion", function (err, rows) {
+    if(err) throw err
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).json(rows)
+    } else {
+      res.status(400).json({"msg":"No se ha podido completar la petición."})
+    }
+  })
+})
+
 module.exports = app;

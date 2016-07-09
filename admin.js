@@ -98,7 +98,7 @@ app.put('/clientes/basicos/:id_cliente', function (req, res) {
   })
 })
 
-app.patch('/clientes/password/:id_cliente', function (req, res) {
+app.patch('/clientes/:id_cliente/password', function (req, res) {
   if (!req.body) return res.status(400).json({"msg":"Error"})
 
   con.query("UPDATE Cliente SET Cliente.password = '"+req.body.password+"' WHERE Cliente.idCliente = '"+req.params.id_cliente+"'", function (err, rows) {

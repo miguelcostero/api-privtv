@@ -133,13 +133,7 @@ app.patch('/clientes/:id_cliente/suscripcion/:id_suscripcion', function (req, re
     if(err) throw err
 
     if (!_.isEmpty(rows)) {
-      con.query("SELECT tipo_suscripcion.* FROM tipo_suscripcion INNER JOIN Cliente ON tipo_suscripcion.id_tipo_suscripcion = Cliente.tipo_suscripcion_id_tipo_suscripcion WHERE Cliente.idCliente = '"+req.params.id_cliente+"'", function (err, rows) {
-        if (err) throw err
-
-        if (!_.isEmpty(result)) {
-          res.status(200).json(rows)
-        }
-      })
+      res.status(200).json(rows)
     } else {
       res.status(400).json({"msg":"No se ha podido completar la petición."})
     }

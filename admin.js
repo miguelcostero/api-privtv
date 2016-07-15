@@ -159,9 +159,9 @@ app.get('/clientes/:email', function (req, res) {
     if (err) throw err
 
     if (!_.isEmpty(rows)) {
-      res.status(200).send("false")
-    } else {
       res.status(200).send("true")
+    } else {
+      res.status(200).send("false")
     }
   })
 })

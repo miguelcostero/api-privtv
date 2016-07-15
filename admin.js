@@ -154,4 +154,16 @@ app.get('/planes', function (req, res) {
   })
 })
 
+app.get('/clientes/:email', function (req, res) {
+  con.query("SELECT Cliente.* FROM Cliente WHERE Cliente.email = '"+req.params.email+"'", function (err, rows) {
+    if (err) throw err
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).send("true")
+    } else {
+      res.status(200).send("false")
+    }
+  })
+})
+
 module.exports = app;

@@ -22,7 +22,8 @@ var con = mysql.createConnection({
 });
 
 // create application/json parser
-var jsonParser = bodyParser.json()
+var jsonParser = bodyParser.json();
+app.use(bodyParser.json({limit: '10mb'}));
 
 // create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({ extended: false })
@@ -249,6 +250,59 @@ app.get('/clientes/:id_cliente', function (req, res) {
       res.status(400).json({"msg": "No se ha encontrado un cliente con el id especificado"})
     }
   })
+})
+
+app.post('/clientes/nuevo', jsonParser, urlencodedParser, function (req, res) {
+  if (!req.body) return res.status(400).json({"msg":"No se ha ejecutado correctamente."})
+
+    var datos = req.body.registro;
+
+    //creamos el cliente en la base de datos
+    con.query("INSERT INTO Cliente (idCliente, email, password, fecha_nacimiento, nombre, apellido, telefono, direccion, tipo_suscripcion_id_tipo_suscripcion) VALUES (DEFAULT, '"+datos.profile.email+"',  '"+datos.profile.password+"',  '"+datos.profile.fecha_nacimiento+"',  '"+datos.profile.nombre+"',  '"+datos.profile.apellido+"',  '"+datos.profile.telefono+"',  '"+datos.profile.direccion+"',  '"+datos.subscription.id_tipo_suscripcion+"')", function (err, result) {
+
+      if (err) throw err;
+
+      if (!_.isEmpty(result)) {
+        //guardamos el id del nuevo cliente creado
+        let id_cliente = result.insertId;
+
+        //creamos usuario
+        con.query("INSERT INTO Usuario (idUsuario, nickname, biografia, imagen_perfil, Cliente_idCliente, admin) VALUES (DEFAULT, '"+datos.user.nickname+"',  '"+datos.user.bio+"',  '"+datos.user.imagen+"', '"+id_cliente+"', 'true')", function (err, result) {
+
+          if (err) throw err;
+
+          if (!_.isEmpty(result)) {
+
+            //guardar gustos
+            let id_usuario = result.insertId;
+            let gustos = datos.user.gustos;
+
+            _.each(gustos, function (data) {
+              con.query("INSERT INTO genero_usuario_gustos (Genero_Gustos, Usuario_Gustos) VALUES ('"+data.idGenero+"', '"+id_usuario+"')", function (err, result) {
+                if (err) throw err;
+              });
+            });
+          } else {
+            res.status(400).json({"msg":"Error"});
+          }
+        });
+
+        //insertamos los datos de pago
+        let nombre_tarjeta = datos.profile.nombre + " " + datos.profile.apellido;
+        let fecha_exp = datos.payment.vencimiento.mes + "/" + datos.payment.vencimiento.ano;
+
+        con.query("INSERT INTO detalles_pago_cliente (iddetalles_pago_cliente, codigo_tarjeta, ccv_tarjeta, nombre_tarjeta, fecha_exp_tarjeta, tipo_tarjeta, Cliente_idCliente) VALUES (DEFAULT, '"+datos.payment.card+"', '"+datos.payment.cvv+"', '"+nombre_tarjeta+"','"+fecha_exp+"', '"+datos.payment.tipo+"', '"+id_cliente+"')", function (err, result) {
+
+          if (err) throw err;
+        })
+
+        //enviamos estado de registro exitoso
+        res.status(200).json({"msg":"Registro exitoso."})
+
+      } else {
+        res.status(500 ).json({"msg":"Ha ocurrido un error inesperado."});
+      }
+    })
 })
 
 module.exports = app;

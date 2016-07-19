@@ -278,7 +278,7 @@ app.post('/clientes/nuevo', jsonParser, urlencodedParser, function (req, res) {
             let gustos = datos.user.gustos;
 
             _.each(gustos, function (data) {
-              con.query("INSERT INTO genero_usuario_gustos (Genero_Gustos, Usuario_Gustos) VALUES ('"+data.idGenero+"', '"+id_usuario+"')", function (err, result) {
+              con.query("INSERT INTO Genero_Usuario_Gustos (Genero_Gustos, Usuario_Gustos) VALUES ('"+data.idGenero+"', '"+id_usuario+"')", function (err, result) {
                 if (err) throw err;
               });
             });

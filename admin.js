@@ -203,11 +203,19 @@ app.get('/usuarios/:id_usuario/clientes/', function (req, res) {
 })
 
 app.delete('/usuarios/:id_usuario/clientes/:id_cliente', function (req, res) {
-  con.query('DELETE FROM Usuario WHERE Usuario.idUsuario = "'+req.params.id_usuario+'"', function (err, rows) {
+  con.query('DELETE FROM Usuario WHERE Usuario.idUsuario = "'+req.params.id_usuario+'"', function (err, result) {
     if (err) throw err
 
-    if (!_.isEmpty(rows)) {
-      res.status(200).send(rows)
+    if (!_.isEmpty(result)) {
+      con.query('SELECT Usuario.* FROM Cliente INNER JOIN Usuario ON Cliente.idCliente = Usuario.Cliente_idCliente WHERE Cliente.idCliente = "' + req.params.id_cliente + '"', function (err, rows) {
+        if (err) throw err
+
+        if (!_.isEmpty(rows)) {
+          res.status(200).send(rows)
+        } else {
+          res.status(400).json({"msg":"error"})
+        }
+      })
     } else {
       res.status(400).json({"msg":"error"})
     }

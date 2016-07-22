@@ -166,4 +166,52 @@ app.get('/clientes/:email', function (req, res) {
   })
 })
 
+app.get('/usuarios/:id_usuario/clientes/:id_cliente', function (req, res) {
+  con.query('SELECT Usuario.* FROM Cliente INNER JOIN Usuario ON Cliente.idCliente = Usuario.Cliente_idCliente WHERE Cliente.idCliente = "' + req.params.id_cliente + '" AND Usuario.idUsuario = "'+req.params.id_usuario+'"', function (err, rows) {
+    if (err) throw err
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).send(rows)
+    } else {
+      res.status(400).json({"msg":"error"})
+    }
+  })
+})
+
+app.get('/usuarios/clientes/:id_cliente', function (req, res) {
+  con.query('SELECT Usuario.* FROM Cliente INNER JOIN Usuario ON Cliente.idCliente = Usuario.Cliente_idCliente WHERE Cliente.idCliente = "' + req.params.id_cliente + '"', function (err, rows) {
+    if (err) throw err
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).send(rows)
+    } else {
+      res.status(400).json({"msg":"error"})
+    }
+  })
+})
+
+app.get('/usuarios/:id_usuario/clientes/', function (req, res) {
+  con.query('SELECT Usuario.* FROM Cliente INNER JOIN Usuario ON Cliente.idCliente = Usuario.Cliente_idCliente WHERE Usuario.idUsuario = "'+req.params.id_usuario+'"', function (err, rows) {
+    if (err) throw err
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).send(rows)
+    } else {
+      res.status(400).json({"msg":"error"})
+    }
+  })
+})
+
+app.delete('/usuarios/:id_usuario/clientes/:id_cliente', function (req, res) {
+  con.query('DELETE FROM Usuario WHERE Usuario.idUsuario = "'+req.params.id_usuario+'"', function (err, rows) {
+    if (err) throw err
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).send(rows)
+    } else {
+      res.status(400).json({"msg":"error"})
+    }
+  })
+})
+
 module.exports = app;

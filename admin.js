@@ -226,7 +226,7 @@ app.delete('/usuarios/:id_usuario/clientes/:id_cliente', function (req, res) {
 app.post('/usuarios/clientes/:id_cliente', function (req, res) {
   if (!req.body) res.status(400).json({"msg":"Error"})
 
-  con.query('INSERT INTO Usuario(idUsuario, nickname, biografia, imagen_perfil, Cliente_idCliente, admin) VALUES (DEFAULT,"'+req.body.registro.nickname+'","'+req.body.registro.biografia+'","'+req.body.registro.imagen_perfil+'","'+req.params.id_cliente+'","false")', function (err, result) {
+  con.query('INSERT INTO Usuario(idUsuario, nickname, biografia, imagen_perfil, Cliente_idCliente, admin) VALUES (DEFAULT,"'+req.body.registro.nickname+'","'+req.body.registro.bio+'","'+req.body.registro.imagen+'","'+req.params.id_cliente+'","false")', function (err, result) {
     if (err) throw err
 
     if (!_.isEmpty(result)) {

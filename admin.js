@@ -226,12 +226,12 @@ app.delete('/usuarios/:id_usuario/clientes/:id_cliente', function (req, res) {
 app.post('/usuarios/clientes/:id_cliente', function (req, res) {
   if (!req.body) res.status(400).json({"msg":"Error"})
 
-  con.query('INSERT INTO Usuario(idUsuario, nickname, biografia, imagen_perfil, Cliente_idCliente, admin) VALUES (DEFAULT, "'+req.body.registro.nickname+'","'+req.body.registro.biografia+'","'+req.body.registro.imagen_perfil+'","'+req.params.id_cliente+'","false")', function (err, result) {
+  con.query('INSERT INTO Usuario(idUsuario, nickname, biografia, imagen_perfil, Cliente_idCliente, admin) VALUES (DEFAULT,"'+req.body.registro.nickname+'","'+req.body.registro.biografia+'","'+req.body.registro.imagen_perfil+'","'+req.params.id_cliente+'","false")', function (err, result) {
     if (err) throw err
 
     if (!_.isEmpty(result)) {
       let id_usuario = result.insertId;
-      let gustos = datos.registro.gustos;
+      let gustos = req.body.registro.gustos;
 
       _.each(gustos, function (data) {
         con.query("INSERT INTO Genero_Usuario_Gustos (Genero_Gustos, Usuario_Gustos) VALUES ('"+data.idGenero+"', '"+id_usuario+"')", function (err, result) {
@@ -239,7 +239,7 @@ app.post('/usuarios/clientes/:id_cliente', function (req, res) {
         });
       });
 
-      con.query("SELECT Usuario.* FROM Usuario WHERE Usuario.idUsuario = '"+id_usuario+"'", function (err, row) {
+      con.query("SELECT Usuario.* FROM Usuario WHERE Usuario.Cliente_idCliente = '"+req.params.id_cliente+"'", function (err, row) {
         if (err) throw err
         res.status(200).json(row)
       });

@@ -231,10 +231,18 @@ app.post('/usuarios/clientes/:id_cliente', function (req, res) {
 
     if (!_.isEmpty(result)) {
       let id_usuario = result.insertId;
+      let gustos = datos.registro.gustos;
+
+      _.each(gustos, function (data) {
+        con.query("INSERT INTO Genero_Usuario_Gustos (Genero_Gustos, Usuario_Gustos) VALUES ('"+data.idGenero+"', '"+id_usuario+"')", function (err, result) {
+          if (err) throw err;
+        });
+      });
+
       con.query("SELECT Usuario.* FROM Usuario WHERE Usuario.idUsuario = '"+id_usuario+"'", function (err, row) {
         if (err) throw err
         res.status(200).json(row)
-      })
+      });
     } else {
       res.status(400).json({"msg":"error"})
     }

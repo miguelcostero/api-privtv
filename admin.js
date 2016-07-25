@@ -268,7 +268,10 @@ app.put('/usuarios/:id_usuario/clientes', function (req, res) {
     }
   })
 
-  res.status(200).json({"msg": "OK"});
+  con.query("SELECT Usuario.* FROM Usuario WHERE Usuario.idUsuario = '"+req.params.id_usuario+"'", function (err, row) {
+    if (err) throw err
+    res.status(200).json(row)
+  });
 })
 
 module.exports = app;

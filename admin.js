@@ -192,7 +192,7 @@ app.get('/usuarios/clientes/:id_cliente', function (req, res) {
 })
 
 app.get('/usuarios/:id_usuario/clientes/', function (req, res) {
-  con.query('SELECT Usuario.* FROM Cliente INNER JOIN Usuario ON Cliente.idCliente = Usuario.Cliente_idCliente WHERE Usuario.idUsuario = "'+req.params.id_usuario+'"', function (err, rows) {
+  con.query('SELECT Usuario.*, Genero.* FROM Usuario INNER JOIN Genero_Usuario_Gustos ON Usuario.idUsuario = Genero_Usuario_Gustos.Usuario_Gustos INNER JOIN Genero ON Genero_Usuario_Gustos.Genero_Gustos = Genero.idGenero WHERE Usuario.idUsuario = "'+req.params.id_usuario+'"', function (err, rows) {
     if (err) throw err
 
     if (!_.isEmpty(rows)) {

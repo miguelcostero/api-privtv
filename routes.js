@@ -252,6 +252,18 @@ app.get('/clientes/:id_cliente', function (req, res) {
   })
 })
 
+app.get('/clientes', function (req, res) {
+  con.query("SELECT Cliente.* FROM Cliente", function (err, rows) {
+    if(err) throw err
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).json(rows)
+    } else {
+      res.status(400).json({"msg": "error"})
+    }
+  })
+})
+
 app.post('/clientes/nuevo', jsonParser, urlencodedParser, function (req, res) {
   if (!req.body) return res.status(400).json({"msg":"No se ha ejecutado correctamente."})
 

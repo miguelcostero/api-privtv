@@ -261,7 +261,7 @@ app.put('/usuarios/:id_usuario/clientes', function (req, res) {
 
     if (!_.isEmpty(result)) {
       _.each(req.body.datos.gustos, function (data) {
-        con.query("INSERT INTO Genero_Usuario_Gustos (Genero_Gustos, Usuario_Gustos) VALUES ('"+data.idGenero+"',Usuario_Gustos='"+req.params.id_usuario+"')", function (err, result) {
+        con.query("INSERT INTO Genero_Usuario_Gustos (Genero_Gustos, Usuario_Gustos) VALUES ('"+data.idGenero+"', '"+req.params.id_usuario+"')", function (err, result) {
           if (err) throw err;
         });
       });

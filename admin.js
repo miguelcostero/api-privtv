@@ -249,4 +249,20 @@ app.post('/usuarios/clientes/:id_cliente', function (req, res) {
   })
 })
 
+app.put('/usuarios/:id_usuario/clientes', function (req, res) {
+  if (!req.body) res.status(400).json({"msg":"Error"});
+
+  con.query("UPDATE Usuario SET Usuario.nickname = '"+req.body.datos.nickname+"', Usuario.biografia = '"+req.body.datos.biografia+"', Usuario.imagen_perfil = '"+req.body.datos.imagen_perfil+"' WHERE Usuario.idUsuario = '"+req.params.id_usuario+"'", function (err, result) {
+    if (err) throw err;
+  });
+
+  _.each(req.body.datos.gustos, function (data) {
+    con.query("UPDATE Genero_Usuario_Gustos SET Genero_Gustos='"+data.idGenero+"',Usuario_Gustos='"+req.params.id_usuario+"' WHERE Usuario.idUsuario = '"+req.params.id_usuario+"'", function (err, result) {
+      if (err) throw err;
+    });
+  });
+
+  res.status(200).json({"msg": "OK"});
+})
+
 module.exports = app;

@@ -256,11 +256,17 @@ app.put('/usuarios/:id_usuario/clientes', function (req, res) {
     if (err) throw err;
   });
 
-  _.each(req.body.datos.gustos, function (data) {
-    con.query("UPDATE Genero_Usuario_Gustos SET Genero_Gustos='"+data.idGenero+"',Usuario_Gustos='"+req.params.id_usuario+"' WHERE Usuario.idUsuario = '"+req.params.id_usuario+"'", function (err, result) {
-      if (err) throw err;
-    });
-  });
+  con.query("DELETE FROM Genero_Usuario_Gustos WHERE Usuario_Gustos='"+req.params.id_usuario+"'", function (err, result) {
+    if (err) throw err;
+
+    if (!_.isEmpty(result)) {
+      _.each(req.body.datos.gustos, function (data) {
+        con.query("INSERT INTO Genero_Usuario_Gustos (Genero_Gustos, Usuario_Gustos) VALUES ('"+data.idGenero+"',Usuario_Gustos='"+req.params.id_usuario+"')", function (err, result) {
+          if (err) throw err;
+        });
+      });
+    }
+  })
 
   res.status(200).json({"msg": "OK"});
 })

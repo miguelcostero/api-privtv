@@ -167,6 +167,30 @@ app.get('/clientes/:email', function (req, res) {
   })
 })
 
+app.get('/clientes/:email/id/:id', function (req, res) {
+  con.query("SELECT Cliente.* FROM Cliente WHERE Cliente.idCliente = '"+req.params.id+"'", function (err, rows) {
+    if (err) throw err
+
+    if (!_.isEmpty(rows)) {
+      if (rows[0].email == req.params.email) {
+        res.status(200).send("true")
+      } else {
+        con.query("SELECT Cliente.* FROM Cliente WHERE Cliente.email = '"+req.params.email+"'", function (error, result) {
+          if (error) throw error
+
+          if (!_.isEmpty(result)) {
+            res.status(200).send("true")
+          } else {
+            res.status(200).send("false")
+          }
+        })
+      }
+    } else {
+      res.status(200).send("false")
+    }
+  })
+})
+
 app.get('/usuarios/:id_usuario/clientes/:id_cliente', function (req, res) {
   con.query('SELECT Usuario.* FROM Cliente INNER JOIN Usuario ON Cliente.idCliente = Usuario.Cliente_idCliente WHERE Cliente.idCliente = "' + req.params.id_cliente + '" AND Usuario.idUsuario = "'+req.params.id_usuario+'"', function (err, rows) {
     if (err) throw err

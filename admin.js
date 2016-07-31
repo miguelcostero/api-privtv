@@ -173,7 +173,7 @@ app.get('/clientes/:email/id/:id', function (req, res) {
 
     if (!_.isEmpty(rows)) {
       if (rows[0].email == req.params.email) {
-        res.status(200).send("true")
+        res.status(200).send("false")
       } else {
         con.query("SELECT Cliente.* FROM Cliente WHERE Cliente.email = '"+req.params.email+"'", function (error, result) {
           if (error) throw error

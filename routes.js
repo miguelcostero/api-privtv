@@ -270,7 +270,7 @@ app.post('/clientes/nuevo', jsonParser, urlencodedParser, function (req, res) {
     var datos = req.body.registro;
 
     //creamos el cliente en la base de datos
-    con.query("INSERT INTO Cliente (idCliente, email, password, fecha_nacimiento, nombre, apellido, telefono, direccion, tipo_suscripcion_id_tipo_suscripcion) VALUES (DEFAULT, '"+datos.profile.email+"',  '"+datos.profile.password+"',  '"+datos.profile.fecha_nacimiento+"',  '"+datos.profile.nombre+"',  '"+datos.profile.apellido+"',  '"+datos.profile.telefono+"',  '"+datos.profile.direccion+"',  '"+datos.subscription.id_tipo_suscripcion+"')", function (err, result) {
+    con.query("INSERT INTO Cliente (idCliente, email, password, fecha_nacimiento, nombre, apellido, telefono, direccion, tipo_suscripcion_id_tipo_suscripcion, fecha_registro) VALUES (DEFAULT, '"+datos.profile.email+"',  '"+datos.profile.password+"',  '"+datos.profile.fecha_nacimiento+"',  '"+datos.profile.nombre+"',  '"+datos.profile.apellido+"',  '"+datos.profile.telefono+"',  '"+datos.profile.direccion+"',  '"+datos.subscription.id_tipo_suscripcion+"', NOW())", function (err, result) {
 
       if (err) throw err;
 
@@ -315,6 +315,20 @@ app.post('/clientes/nuevo', jsonParser, urlencodedParser, function (req, res) {
         res.status(500 ).json({"msg":"Ha ocurrido un error inesperado."});
       }
     })
+})
+
+app.get("/clientes/:id_cliente/pagos", function (req, res) {
+  if (!req.params.id_cliente) return res.status(400).json({"msg":"No se ha podido procesar su petición."})
+
+  con.query("SELECT Cliente.*, detalles_pago_cliente.* FROM Cliente INNER JOIN detalles_pago_cliente ON Cliente.idCliente = detalles_pago_cliente.Cliente_idCliente WHERE Cliente.idCliente = '"+req.params.id_cliente+"'", function (err, rows) {
+    if (err) throw err
+
+    if (!_.isEmpty(rows)) {
+      res.status(200).json(rows)
+    } else {
+      res.status(400).json({"msg":"No se ha encontrado el cliente solicitado."})
+    }
+  })
 })
 
 module.exports = app;
